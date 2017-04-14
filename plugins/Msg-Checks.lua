@@ -1,4 +1,4 @@
---Begin Msg-Checks.lua By @MahDiRoO
+
 local TIME_CHECK = 2
 local function pre_process(msg)
 local data = load_data(_config.moderation.data)
