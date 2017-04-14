@@ -1,4 +1,4 @@
---Begin Report.lua By @MahDiRoO
+--Begin Report.lua By 
 local function run(msg, matches)
  local ldata = load_data(_config.moderation.data)
  if matches[1]:lower() == 'setmaster' and is_admin(msg) then
