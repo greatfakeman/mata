@@ -4176,7 +4176,7 @@ end
 
 if matches[1] == "ping" or matches[1] == "Ping" or matches[1] == "انلاینی" then
 text = [[
-ρøиg
+⚔️🔱انلاینم و همیشه حواسم به گروه هست🔱⚔️
 ]]
 return text
 end
