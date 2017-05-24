@@ -100,7 +100,8 @@ function create_config( )
     "Rmsg",
     "Time",
     "Tools",
-    "Write"
+    "Write",
+    "pv"
 	},
     sudo_users = {272167798},
     admins = {},
