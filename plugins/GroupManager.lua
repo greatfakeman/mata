@@ -115,6 +115,58 @@ else
 end
 end
 
+ local function config_cb(arg, data)
+local hash = "gp_lang:"..arg.chat_id
+local lang = redis:get(hash)
+  print(serpent.block(data))
+   for k,v in pairs(data.members_) do
+   local function config_mods(arg, data)
+       local administration = load_data(_config.moderation.data)
+if data.username_ then
+user_name = '@'..check_markdown(data.username_)
+else
+user_name = check_markdown(data.first_name_)
+end
+if administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] then
+    return
+   end
+administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] = user_name
+    save_data(_config.moderation.data, administration)
+   end
+tdcli_function ({
+    ID = "GetUser",
+    user_id_ = v.user_id_
+  }, config_mods, {chat_id=arg.chat_id,user_id=v.user_id_})
+ 
+if data.members_[k].status_.ID == "ChatMemberStatusCreator" then
+owner_id = v.user_id_
+   local function config_owner(arg, data)
+  print(serpent.block(data))
+       local administration = load_data(_config.moderation.data)
+if data.username_ then
+user_name = '@'..check_markdown(data.username_)
+else
+user_name = check_markdown(data.first_name_)
+end
+if administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
+    return
+   end
+administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] = user_name
+    save_data(_config.moderation.data, administration)
+   end
+tdcli_function ({
+    ID = "GetUser",
+    user_id_ = owner_id
+  }, config_owner, {chat_id=arg.chat_id,user_id=owner_id})
+   end
+end
+  if not lang then
+    return tdcli.sendMessage(arg.chat_id, "", 0, "_All group admins has been promoted and group creator is now group owner_", 0, "md")
+else
+    return tdcli.sendMessage(arg.chat_id, "", 0, "_تمام ادمین های گروه به مقام مدیر منتصب شدند و سازنده گروه به مقام مالک گروه منتصب شد_", 0, "md")
+     end
+end
+
 local function filter_word(msg, word)
 local hash = "gp_lang:"..msg.to.id
 local lang = redis:get(hash)
@@ -3521,6 +3573,9 @@ end
   if matches[1] == 'filterlist' and is_mod(msg) or  matches[1] == 'لیست فیلتر' and is_mod(msg) or matches[1] == 'Filterlist' and is_mod(msg) then
     return filter_list(msg)
   end
+  if matches[1]:lower() == 'config' and is_admin(msg) or matches[1] == 'پیکربندی' and is_admin(msg) then
+tdcli.getChannelMembers(msg.to.id, 0, 'Administrators', 200, config_cb, {chat_id=msg.to.id})
+end
 if matches[1] == "settings" or matches[1] == "تنظیمات" or matches[1] == "Settings" then
 return group_settings(msg, target)
 end
@@ -3558,7 +3613,7 @@ text = [[
 _»»»»»»»»»»»»»»»_
 🎗*»  راهنمای قفلی*
 
-🔸#دستورات‌قفلی 🙄👆🏻
+🎩#دستورات‌قفلی 🙄👆🏻
 _»»»»»»»»»»»»»»»_
 🎗*»  راهنمای مدیریتی*
 
@@ -3566,7 +3621,7 @@ _»»»»»»»»»»»»»»»_
 _»»»»»»»»»»»»»»»_
 🎗*»  راهنمای فان*
 
-🔸#دستورات‌سرگرم‌کننده 🙄👆🏻
+🎩#دستورات‌سرگرم‌کننده 🙄👆🏻
 _»»»»»»»»»»»»»»»_
 
 > زبان ربات فارسی !
@@ -3617,103 +3672,105 @@ end
 
 if matches[1] == "sudohelp" and is_mod(msg) or  matches[1] == "Sudohelp" and is_mod(msg) or  matches[1] == "راهنمای صاحب" and is_mod(msg) then
 text = [[
-⚜*FAKE bot*
+⚜ *luxury bot* ⚜
 
 *Visudo* `[username|id|reply]`
-🔹_اضافه کردن سودو_
+🔱 _اضافه کردن سودو_
 
 *Desudo* `[username|id|reply]`
-🔸_حذف کردن سودو_
+🎩_حذف کردن سودو_
 
 *Sudolist* 
-🔹_لیست سودو‌های ربات_
+🔱 _لیست سودو‌های ربات_
 
 *Adminprom* `[username|id|reply]`
-🔸_اضافه کردن ادمین به ربات_
+🎩_اضافه کردن ادمین به ربات_
 
 *Admindem* `[username|id|reply]`
-🔹_حذف فرد از ادمینی ربات_
+🔱_حذف فرد از ادمینی ربات_
 
 *Adminlist* 
-🔸_لیست ادمین ها_
+🎩_لیست ادمین ها_
 
 *Leave* 
-🔹_خارج شدن ربات از گروه_
+🔱_خارج شدن ربات از گروه_
 
 *Autoleave* `[disable/enable]`
-🔸_خروج خودکار_
+🎩_خروج خودکار_
 
 *Creategroup* `[text]`
-🔹_ساخت گروه ریلم_
+🔱_ساخت گروه ریلم_
 
 *Createsuper* `[text]`
-🔸_ساخت سوپر گروه_
+🎩_ساخت سوپر گروه_
 
 *Tosuper* 
-🔹_تبدیل به سوپر گروه_
+🔱_تبدیل به سوپر گروه_
 
 *Chats*
-🔸_لیست گروه های مدیریتی ربات_
+🎩_لیست گروه های مدیریتی ربات_
 
 *Join* `[id]`
-🔹_جوین شدن توسط ربات_
+🔱_جوین شدن توسط ربات_
 
 *Rem* `[id]`
-🔸_حذف گروه ازطریق پنل مدیریتی_
+🎩_حذف گروه ازطریق پنل مدیریتی_
 
 *Import* `[link]`
-🔹_جوین شدن ربات توسط لینک_
+🔱_جوین شدن ربات توسط لینک_
 
 *Setbotname* `[text]`
-🔸_تغییر اسم ربات_
+🎩_تغییر اسم ربات_
 
 *Setbotusername* `[text]`
-🔹_تغییر یوزرنیم ربات_
+🔱_تغییر یوزرنیم ربات_
 
 *Delbotusername* 
-🔸_پاک کردن یوزرنیم ربات_
+🎩_پاک کردن یوزرنیم ربات_
 
 *Markread* `[off/on]`
-🔹_تیک دوم_
+🔱_تیک دوم_
 
 *Broadcast* `[text]`
-🔸_فرستادن پیام به تمام گروه های مدیریتی ربات_
+🎩_فرستادن پیام به تمام گروه های مدیریتی ربات_
 
 *Bc* `[text]` `[gpid]`
-🔹_ارسال پیام مورد نظر به گروه خاص_
+🔱_ارسال پیام مورد نظر به گروه خاص_
 
 *Sendfile* `[cd]` `[file]`
-🔸_ارسال فایل موردنظر از پوشه خاص_
+🎩_ارسال فایل موردنظر از پوشه خاص_
 
 *Sendplug* `[plug]`
-🔹_ارسال پلاگ مورد نظر_
+🔱_ارسال پلاگ مورد نظر_
 
 *Save* `[plugin name] [reply]`
-🔸_ذخیره کردن پلاگین_
+🎩_ذخیره کردن پلاگین_
 
 *Savefile* `[address/filename] [reply]`
-🔹_ذخیره کردن فایل در پوشه مورد نظر_
+🔱_ذخیره کردن فایل در پوشه مورد نظر_
 
 *Clear cache*
-🔸_پاک کردن کش مسیر .telegram-cli/data_
+🎩_پاک کردن کش مسیر .telegram-cli/data_
 
 *Check*
-🔹_اعلام تاریخ انقضای گروه_
+🔱_اعلام تاریخ انقضای گروه_
 
 *Check* `[GroupID]`
-🔸_اعلام تاریخ انقضای گروه مورد نظر_
+🎩_اعلام تاریخ انقضای گروه مورد نظر_
 
 *Charge* `[GroupID]` `[Number Of Days]`
-🔹_تنظیم تاریخ انقضای گروه مورد نظر_
+🔱_تنظیم تاریخ انقضای گروه مورد نظر_
 
 *Charge* `[Number Of Days]`
-🔸_تنظیم تاریخ انقضای گروه_
+🎩_تنظیم تاریخ انقضای گروه_
 
 *Jointo* `[GroupID]`
-🔹_دعوت شدن شما توسط ربات به گروه مورد نظر_
+🔱_دعوت شدن شما توسط ربات به گروه مورد نظر_
 
 *Leave* `[GroupID]`
-🔸_خارج شدن ربات از گروه مورد نظر_
+🎩_خارج شدن ربات از گروه مورد نظر_
+*config* پیکربندی
+🔱_پیکر بندی گروه_
 
 🍃*شما میتوانید از [!/#] در اول دستورات برای اجرای آنها بهره بگیرید*
 
@@ -3724,7 +3781,7 @@ text = [[
 *موفق باشید ;)*
 
 *〰〰〰〰〰〰〰〰〰*
-🎭*pwered вy :* @GFAKEMBOT
+🎭*pwered вy :* @sudoX
 💢*cнαɴɴel :* @FAKEbots
 
 ]]
@@ -4434,6 +4491,9 @@ patterns ={
 "^[!/#]([Nn]erkh)$",
 "^([Nn]erkh)$",
 "^(نرخ)$",
+"^[#!/]([Cc]onfig)$",
+"^([Cc]onfig)$",
+"^(پیکربندی)$",
 "^[!/#]([Pp]ing)$",
 "^([Pp]ing)$",
 "^(انلاینی)$"
